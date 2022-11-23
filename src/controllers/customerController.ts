@@ -15,7 +15,8 @@ export const getCustomers = asyncHandler(async (req: Request, res: Response) => 
       isActive: queryParams.isActive !== undefined ? queryParams.isActive === 'true' : undefined
     };
     
-    const result = await CustomerService.getAllCustomers(processedParams);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const result = await customerService.getAllCustomers(processedParams);
     
     res.json({
       success: true,
@@ -33,7 +34,8 @@ export const getCustomers = asyncHandler(async (req: Request, res: Response) => 
 
 export const getCustomer = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const customer = await CustomerService.getCustomerById(req.params.id);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customer = await customerService.getCustomerById(req.params.id);
 
     return res.json({
       success: true,
@@ -50,7 +52,8 @@ export const getCustomer = asyncHandler(async (req: Request, res: Response) => {
 
 export const createCustomer = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const customer = await CustomerService.createCustomer(req.body);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customer = await customerService.createCustomer(req.body);
 
     res.status(201).json({
       success: true,
@@ -67,7 +70,8 @@ export const createCustomer = asyncHandler(async (req: Request, res: Response) =
 
 export const updateCustomer = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const customer = await CustomerService.updateCustomer(req.params.id, req.body);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customer = await customerService.updateCustomer(req.params.id, req.body);
 
     return res.json({
       success: true,
@@ -84,7 +88,8 @@ export const updateCustomer = asyncHandler(async (req: Request, res: Response) =
 
 export const deleteCustomer = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const customer = await CustomerService.deleteCustomer(req.params.id);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customer = await customerService.deleteCustomer(req.params.id);
 
     return res.json({
       success: true,
@@ -102,7 +107,8 @@ export const deleteCustomer = asyncHandler(async (req: Request, res: Response) =
 export const searchByCustomerCode = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { customerCode } = req.params;
-    const customers = await CustomerService.searchByCustomerCode(customerCode);
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customers = await customerService.searchByCustomerCode(customerCode);
 
     res.json({
       success: true,
@@ -119,7 +125,8 @@ export const searchByCustomerCode = asyncHandler(async (req: Request, res: Respo
 
 export const getActiveCustomers = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const customers = await CustomerService.getActiveCustomers();
+    const customerService = req.services?.get(CustomerService) || new CustomerService();
+    const customers = await customerService.getActiveCustomers();
 
     res.json({
       success: true,

@@ -17,7 +17,8 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
       isActive: queryParams.isActive !== undefined ? queryParams.isActive === 'true' : undefined
     };
     
-    const result = await UserService.getAllUsers(processedParams);
+    const userService = req.services?.get(UserService) || new UserService();
+    const result = await userService.getAllUsers(processedParams);
     
     res.json({
       success: true,
@@ -35,7 +36,8 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await UserService.getUserById(req.params.id);
+    const userService = req.services?.get(UserService) || new UserService();
+    const user = await userService.getUserById(req.params.id);
 
     return res.json({
       success: true,
@@ -52,7 +54,8 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await UserService.updateUser(req.params.id, req.body);
+    const userService = req.services?.get(UserService) || new UserService();
+    const user = await userService.updateUser(req.params.id, req.body);
 
     return res.json({
       success: true,
@@ -69,7 +72,8 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const deactivateUser = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await UserService.deactivateUser(req.params.id);
+    const userService = req.services?.get(UserService) || new UserService();
+    const user = await userService.deactivateUser(req.params.id);
 
     return res.json({
       success: true,
@@ -86,7 +90,8 @@ export const deactivateUser = asyncHandler(async (req: Request, res: Response) =
 
 export const activateUser = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await UserService.activateUser(req.params.id);
+    const userService = req.services?.get(UserService) || new UserService();
+    const user = await userService.activateUser(req.params.id);
 
     return res.json({
       success: true,
@@ -104,7 +109,8 @@ export const activateUser = asyncHandler(async (req: Request, res: Response) => 
 export const getUsersByRole = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { role } = req.params;
-    const users = await UserService.getUsersByRole(role as UserRole);
+    const userService = req.services?.get(UserService) || new UserService();
+    const users = await userService.getUsersByRole(role as UserRole);
 
     res.json({
       success: true,
@@ -122,7 +128,8 @@ export const getUsersByRole = asyncHandler(async (req: Request, res: Response) =
 export const getUsersByDepartment = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { department } = req.params;
-    const users = await UserService.getUsersByDepartment(department);
+    const userService = req.services?.get(UserService) || new UserService();
+    const users = await userService.getUsersByDepartment(department);
 
     res.json({
       success: true,
@@ -142,7 +149,8 @@ export const updateUserRole = asyncHandler(async (req: Request, res: Response) =
     const { role } = req.body;
     const updatedBy = req.user?._id?.toString() || '';
     
-    const result = await UserService.updateUserRole(req.params.id, role, updatedBy);
+    const userService = req.services?.get(UserService) || new UserService();
+    const result = await userService.updateUserRole(req.params.id, role, updatedBy);
     
     return res.json({
       success: true,

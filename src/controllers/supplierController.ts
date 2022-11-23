@@ -15,7 +15,8 @@ export const getSuppliers = asyncHandler(async (req: Request, res: Response) => 
       isActive: queryParams.isActive !== undefined ? queryParams.isActive === 'true' : undefined
     };
     
-    const result = await SupplierService.getAllSuppliers(processedParams);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const result = await supplierService.getAllSuppliers(processedParams);
     
     res.json({
       success: true,
@@ -33,7 +34,8 @@ export const getSuppliers = asyncHandler(async (req: Request, res: Response) => 
 
 export const getSupplier = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const supplier = await SupplierService.getSupplierById(req.params.id);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const supplier = await supplierService.getSupplierById(req.params.id);
 
     return res.json({
       success: true,
@@ -50,7 +52,8 @@ export const getSupplier = asyncHandler(async (req: Request, res: Response) => {
 
 export const createSupplier = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const supplier = await SupplierService.createSupplier(req.body);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const supplier = await supplierService.createSupplier(req.body);
 
     res.status(201).json({
       success: true,
@@ -67,7 +70,8 @@ export const createSupplier = asyncHandler(async (req: Request, res: Response) =
 
 export const updateSupplier = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const supplier = await SupplierService.updateSupplier(req.params.id, req.body);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const supplier = await supplierService.updateSupplier(req.params.id, req.body);
 
     return res.json({
       success: true,
@@ -84,7 +88,8 @@ export const updateSupplier = asyncHandler(async (req: Request, res: Response) =
 
 export const deleteSupplier = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const supplier = await SupplierService.deleteSupplier(req.params.id);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const supplier = await supplierService.deleteSupplier(req.params.id);
 
     return res.json({
       success: true,
@@ -102,7 +107,8 @@ export const deleteSupplier = asyncHandler(async (req: Request, res: Response) =
 export const searchBySupplierCode = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { supplierCode } = req.params;
-    const suppliers = await SupplierService.searchBySupplierCode(supplierCode);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const suppliers = await supplierService.searchBySupplierCode(supplierCode);
 
     res.json({
       success: true,
@@ -119,7 +125,8 @@ export const searchBySupplierCode = asyncHandler(async (req: Request, res: Respo
 
 export const getActiveSuppliers = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const suppliers = await SupplierService.getActiveSuppliers();
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const suppliers = await supplierService.getActiveSuppliers();
 
     res.json({
       success: true,
@@ -136,7 +143,8 @@ export const getActiveSuppliers = asyncHandler(async (req: Request, res: Respons
 
 export const getSupplierProducts = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const products = await SupplierService.getSupplierProducts(req.params.id);
+    const supplierService = req.services?.get(SupplierService) || new SupplierService();
+    const products = await supplierService.getSupplierProducts(req.params.id);
 
     res.json({
       success: true,

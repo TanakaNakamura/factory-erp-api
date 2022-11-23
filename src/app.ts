@@ -6,6 +6,7 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import 'reflect-metadata';
 
 import authRoutes from './routes/auth';
 import userRoutes from './routes/users';
@@ -18,6 +19,10 @@ import reportRoutes from './routes/reports';
 
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
+
+import { globalContainer } from './container';
+import { ServiceRegistrationModule, ServiceFactories } from './container/ServiceRegistration';
+import { DIMiddleware } from './container/ExpressIntegration';
 
 dotenv.config();
 
@@ -41,6 +46,8 @@ app.use(compression());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(DIMiddleware.create(globalContainer));
 
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -72,12 +79,25 @@ const connectDB = async () => {
   }
 };
 
+const configureDI = () => {
+  console.log('Configuring Dependency Injection container...');
+  
+  ServiceRegistrationModule.register(globalContainer);
+  
+  ServiceFactories.setContainer(globalContainer);
+  
+  console.log('DI container configured successfully');
+};
+
 const startServer = async () => {
+  configureDI();
+  
   await connectDB();
   
   app.listen(PORT, () => {
     console.log(`Factory ERP API Server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log('DI Container: Enabled');
   });
 };
 
